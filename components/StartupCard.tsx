@@ -1,10 +1,12 @@
-import { formatDate } from '@/lib/utils'
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
+import { cn, formatDate } from '@/lib/utils'
 import { EyeIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
 import { Author, Startup } from '@/sanity/types'
+import { Skeleton } from './ui/skeleton'
 
 export type StartupTypeCard = Omit<Startup, "author"> & { author?: Author }
 
@@ -41,7 +43,7 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
                     </Link>
                 </div>
                 <Link href={`/user/${author?._id}`}>
-                    <Image src={`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4wZVIk1v_Ydj6-NyAPzrIt5u46uuRIznzHA&s`} alt='Placeholder' width={48} height={48} className=' rounded-full' />
+                    <Image src={author?.image!} alt={author?.name!} width={48} height={48} className=' rounded-full' />
                 </Link>
             </div>
 
@@ -49,6 +51,7 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
                 <p className='startup-card_desc'>
                     {description}
                 </p>
+                {/*  eslint-disable-next-line @next/next/no-img-element */}
                 <img src={image} alt="placeholder" className='startup-card_img' />
             </Link>
 
@@ -64,7 +67,17 @@ const StartupCard = ({ post }: { post: StartupTypeCard }) => {
                 </Button>
             </div>
         </li>
-    )
-}
+    );
+};
+
+export const StartupCardSkeleton = () => (
+    <>
+      {[0, 1, 2, 3, 4].map((index: number) => (
+        <li key={cn("skeleton", index)}>
+          <Skeleton className="startup-card_skeleton" />
+        </li>
+      ))}
+    </>
+  );
 
 export default StartupCard
